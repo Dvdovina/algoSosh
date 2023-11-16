@@ -1,0 +1,27 @@
+.input_box {
+    display: flex;
+    gap: 12px;
+    margin: 0 auto;
+    max-width: 840px;
+}
+
+.buttons_box {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-start;
+    width: 430px;
+}
+
+.clear {
+    margin-left: 60px;
+}
+
+.circle_box {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    list-style-type: none;
+    margin: 0 auto;
+    padding-left: 0;
+    padding-top: 120px;
+}
