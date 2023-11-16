@@ -1,19 +1,18 @@
 .input_box {
+    column-gap: 12px;
     display: flex;
-    gap: 12px;
+    justify-content: space-between;
     margin: 0 auto;
     max-width: 840px;
+    padding-bottom: 15px;
 }
 
-.buttons_box {
-    display: flex;
-    gap: 12px;
-    justify-content: flex-start;
-    width: 430px;
+.button {
+    width: 362px;
 }
 
-.clear {
-    margin-left: 80px;
+.input {
+    max-width: 204px
 }
 
 .circle_box {
@@ -26,25 +25,9 @@
     padding-top: 120px;
 }
 
-.paragraph {
-    color: #3d3d3d;
-    display: flex;
-    font-family: Segoe UI;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 22px;
-    margin: 6px 0 0 490px;
-    padding: 0;
-}
 
-
-.list {
-    margin: 0 auto;
+.listItem {
+    align-items: center;
     display: flex;
-    justify-content: center;
-    padding-top: 120px;
-    padding-left: 0;
-    list-style-type: none;
     gap: 16px;
-  }
+}

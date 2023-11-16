@@ -21,7 +21,7 @@ export const ListPage: React.FC = () => {
 
   const { values, handleChange, setValues } = useForm({ value: "" });
 
-  const [index, setIndex] = useState<{ value: string; }>({ value: "" });
+  const [currentIndex, setIndex] = useState<{ value: string; }>({ value: "" });
 
   const initialArr: TString[] = [
     { value: "0", state: ElementStates.Default },
@@ -36,7 +36,7 @@ export const ListPage: React.FC = () => {
 
   const [loader, setLoader] = useState(false);
 
-  const [string, setString] = useState<TString[]>(list.toArray());
+  const [arr, setArr] = useState<TString[]>(list.toArray());
 
   const [current, setCurrent] = useState<string>();
 
@@ -44,11 +44,11 @@ export const ListPage: React.FC = () => {
 
   const [tail, setTail] = useState<string | React.ReactElement<any, string | React.JSXElementConstructor<any>>>("");
 
-  let indexNum = Number(index.value);
+  let indexNum = Number(currentIndex.value);
 
   const changeInputIndex = (event: SyntheticEvent<HTMLInputElement>) => {
     const { value, name } = event.target as HTMLInputElement;
-    setIndex({ ...index, [name]: value });
+    setIndex({ ...currentIndex, [name]: value });
   };
 
 
@@ -69,12 +69,12 @@ export const ListPage: React.FC = () => {
       );
       setList(list);
       await timeout(SHORT_DELAY_IN_MS);
-      setString([...list.toArray()]);
+      setArr([...list.toArray()]);
       setHead("head");
       await timeout(SHORT_DELAY_IN_MS);
       list.toArray()[0].state = ElementStates.Default;
       setList(list);
-      setString([...list.toArray()]);
+      setArr([...list.toArray()]);
       setCurrent("");
       setLoader(false);
       setValues({ value: "" });
@@ -98,7 +98,7 @@ export const ListPage: React.FC = () => {
     list.deleteHead();
     setList(list);
     await timeout(SHORT_DELAY_IN_MS);
-    setString([...list.toArray()]);
+    setArr([...list.toArray()]);
     setTail("");
     setText("");
     setCurrent("");
@@ -123,12 +123,12 @@ export const ListPage: React.FC = () => {
       );
       setList(list);
       await timeout(SHORT_DELAY_IN_MS);
-      setString([...list.toArray()]);
+      setArr([...list.toArray()]);
       setHead("");
       await timeout(SHORT_DELAY_IN_MS);
-      list.toArray()[string.length].state = ElementStates.Default;
+      list.toArray()[arr.length].state = ElementStates.Default;
       setList(list);
-      setString([...list.toArray()]);
+      setArr([...list.toArray()]);
       setCurrent("");
       setValues({ value: "" });
       setLoader(false);
@@ -142,16 +142,16 @@ export const ListPage: React.FC = () => {
     setText("Удалить из tail");
     setTail(
       <Circle
-        letter={list.toArray()[string.length - 1].value}
+        letter={list.toArray()[arr.length - 1].value}
         state={ElementStates.Changing}
         isSmall={true}
       />
     );
-    list.toArray()[string.length - 1].value = "";
+    list.toArray()[arr.length - 1].value = "";
     await timeout(SHORT_DELAY_IN_MS);
     list.deleteTail();
     setList(list);
-    setString([...list.toArray()]);
+    setArr([...list.toArray()]);
     setTail("tail");
     setText("");
     setCurrent("");
@@ -177,20 +177,20 @@ export const ListPage: React.FC = () => {
           await timeout(SHORT_DELAY_IN_MS);
           list.toArray()[i].state = ElementStates.Changing;
           setList(list);
-          setString([...list.toArray()]);
+          setArr([...list.toArray()]);
           await timeout(SHORT_DELAY_IN_MS);
         }
       }
       list.addByIndex({ value: values.value, state: ElementStates.Modified }, indexNum);
       setList(list);
-      setString([...list.toArray()]);
+      setArr([...list.toArray()]);
       await timeout(SHORT_DELAY_IN_MS);
       const arr = list.toArray().map((value) => ({
         ...value,
         color: ElementStates.Default,
       })) as TString[];
       setList(list);
-      setString([...arr]);
+      setArr([...arr]);
       setHead("");
       setCurrent("");
       setText("");
@@ -212,7 +212,7 @@ export const ListPage: React.FC = () => {
         await timeout(SHORT_DELAY_IN_MS);
         list.toArray()[i].state = ElementStates.Changing;
         setList(list);
-        setString([...list.toArray()]);
+        setArr([...list.toArray()]);
         await timeout(SHORT_DELAY_IN_MS);
       }
       if (i === indexNum) {
@@ -224,23 +224,23 @@ export const ListPage: React.FC = () => {
           />
         );
         setList(list);
-        setString([...list.toArray()]);
+        setArr([...list.toArray()]);
         list.toArray()[indexNum].value = "";
         setList(list);
-        setString([...list.toArray()]);
+        setArr([...list.toArray()]);
         await timeout(SHORT_DELAY_IN_MS);
       }
     }
     list.deleteByIndex(indexNum);
     setList(list);
     await timeout(SHORT_DELAY_IN_MS);
-    setString([...list.toArray()]);
+    setArr([...list.toArray()]);
     const defaultArray = list.toArray().map((value) => ({
       ...value,
       color: ElementStates.Default,
     })) as TString[];
     setList(list);
-    setString([...defaultArray]);
+    setArr([...defaultArray]);
     setTail("");
     setCurrent("");
     setText("");
@@ -307,11 +307,13 @@ export const ListPage: React.FC = () => {
       <form className={listPageStyles.input_box}>
         <Input
           placeholder="Введите значение"
+          extraClass={listPageStyles.input}
           maxLength={4}
           type="text"
           isLimitText={true}
           onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
           value={values.value}
+          name="value"
           disabled={(loader ? true : false) || (list.toArray().length === 6 ? true : false)}
         />
         <Button
@@ -333,24 +335,25 @@ export const ListPage: React.FC = () => {
           type="button"
           onClick={() => deleteHeadOnClick()}
           isLoader={current === "Удалить из head" && loader}
-          disabled={loader ? true : false}
+          disabled={arr.length === 0}
         />
         <Button
           text="Удалить из tail"
           type="button"
           onClick={() => deleteTailOnClick()}
           isLoader={current === "Удалить из tail" && loader}
-          disabled={loader ? true : false}
+          disabled={arr.length === 0}
         />
       </form>
       <form className={listPageStyles.input_box}>
         <Input
           placeholder="Введите индекс"
+          extraClass={listPageStyles.input}
           onChange={changeInputIndex}
-          value={index.value}
+          value={currentIndex.value}
           disabled={(loader ? true : false)}
           type="number"
-          max={6}
+          max={10}
           min={0}
           name="value"
         />
@@ -358,29 +361,31 @@ export const ListPage: React.FC = () => {
           text="Добавить по индексу"
           type="button"
           onClick={() => addIndexOnClick()}
+          extraClass={listPageStyles.button}
           isLoader={current === "Добавить по индексу" && loader}
           disabled={
-            ((values.value === "" || index.value === "" || (list.toArray().length - 1) < Number(index.value)) ? true : false)
+            ((values.value === "" || currentIndex.value === "" || (list.toArray().length - 1) < Number(currentIndex.value)) ? true : false)
           }
         />
         <Button
           text="Удалить по индексу"
           type="button"
+          extraClass={listPageStyles.button}
           onClick={() => deleteIndexOnClick()}
-          disabled={index.value === "" || (list.toArray().length - 1) < Number(index.value) ? true : false}
+          disabled={currentIndex.value === "" || (list.toArray().length - 1) < Number(currentIndex.value) ? true : false}
           isLoader={current === "Удалить по индексу" && loader}
         />
       </form>
 
-      <ul className={listPageStyles.list}>
-        {string &&
-          string?.map((item, index) => {
+      <ul className={listPageStyles.circle_box}>
+        {arr &&
+          arr?.map((item, index) => {
             return (
               <li key={index} className={listPageStyles.listItem}>
                 <Circle
                   letter={item.value}
                   head={showHead(
-                    string,
+                    arr,
                     current,
                     index,
                     text,
@@ -388,7 +393,7 @@ export const ListPage: React.FC = () => {
                     indexNum
                   )}
                   tail={showTail(
-                    string,
+                    arr,
                     index,
                     text,
                     tail,
@@ -397,7 +402,7 @@ export const ListPage: React.FC = () => {
                   state={item.state}
                   index={index}
                 />
-                {index < string.length - 1 ? <ArrowIcon /> : null}
+                {index < arr.length - 1 ? <ArrowIcon /> : null}
               </li>
             );
           })}
