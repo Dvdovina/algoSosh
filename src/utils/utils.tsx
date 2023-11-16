@@ -1,7 +1,7 @@
-import { TString } from "../types/common-types";
+import { TString, TArray } from "../types/common-types";
 
 export const swap = (
-    arr: TString[],
+    arr: TString[] | TArray[],
     start: number,
     end: number
   ): void => {

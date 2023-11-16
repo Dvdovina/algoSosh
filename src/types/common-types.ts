@@ -13,3 +13,8 @@ export type TStack<T> = {
   getLength: () => number;
   getContainer: () => T[];
 }
+
+export type TArray = {
+  number: number;
+  state: ElementStates;
+};
