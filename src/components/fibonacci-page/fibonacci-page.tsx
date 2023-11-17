@@ -32,7 +32,7 @@ export const FibonacciPage: React.FC = () => {
           min={1}
           value={values.value}
           name="value"
-          onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
+          onChange={handleChange}
           type="number"
         />
         <Button

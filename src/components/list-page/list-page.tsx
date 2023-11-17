@@ -311,7 +311,7 @@ export const ListPage: React.FC = () => {
           maxLength={4}
           type="text"
           isLimitText={true}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
+          onChange={handleChange}
           value={values.value}
           name="value"
           disabled={(loader ? true : false) || (list.toArray().length === 6 ? true : false)}

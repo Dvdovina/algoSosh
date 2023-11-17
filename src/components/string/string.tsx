@@ -41,7 +41,7 @@ export const StringComponent: React.FC = () => {
           maxLength={11}
           value={values.value}
           name="value"
-          onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
+          onChange={handleChange}
         />
         <Button
           text="Развернуть"

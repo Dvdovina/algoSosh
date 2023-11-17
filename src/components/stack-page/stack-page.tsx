@@ -57,7 +57,7 @@ export const StackPage: React.FC = () => {
           maxLength={4}
           value={values.value}
           name="value"
-          onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
+          onChange={handleChange}
           type="string"
           extraClass={stackPageStyles.input}
           placeholder="Введите значение"

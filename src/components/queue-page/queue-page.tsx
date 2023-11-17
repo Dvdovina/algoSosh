@@ -60,7 +60,7 @@ export const QueuePage: React.FC = () => {
           value={values.value}
           name="value"
           type="string"
-          onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e)}
+          onChange={handleChange}
         />
         <div className={queuePageStyles.buttons_box}>
           <Button
