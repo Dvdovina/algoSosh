@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { ChangeEvent } from "react";
+import { FormEvent } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import stringStyles from "./string.module.css"
 import { Input } from "../ui/input/input";
@@ -21,7 +21,8 @@ export const StringComponent: React.FC = () => {
   const [loader, setLoader] = useState(false);
   const [state, setState] = useState<TString[]>([]);
 
-  const onClick = async () => {
+  const onClick = async (evt: FormEvent) => {
+    evt.preventDefault();
     setLoader(true);
     const array = Array.from(values.value);
     const arrayObj = array.map((value) => ({
@@ -36,7 +37,7 @@ export const StringComponent: React.FC = () => {
 
   return (
     <SolutionLayout title="Строка">
-      <form className={stringStyles.input_box}>
+      <form className={stringStyles.input_box} onSubmit={onClick}>
         <Input
           maxLength={11}
           value={values.value}
@@ -45,9 +46,8 @@ export const StringComponent: React.FC = () => {
         />
         <Button
           text="Развернуть"
-          type="button"
+          type="submit"
           isLoader={loader}
-          onClick={onClick}
           disabled={values.value ? false : true}
         />
       </form>
