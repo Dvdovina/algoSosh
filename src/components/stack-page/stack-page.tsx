@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { ChangeEvent } from "react";
+import { FormEvent } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import stackPageStyles from "./stack-page.module.css"
 import { Input } from "../ui/input/input";
@@ -19,7 +19,8 @@ export const StackPage: React.FC = () => {
   const [stack, setStack] = useState(new Stack<TString>());
   const [state, setState] = useState<TString[]>([]);
 
-  const onClick = async (text: string) => {
+  const onClick = async (text: string, evt: FormEvent) => {
+    evt.preventDefault();
     const arr = stack.getContainer();
     if (values.value !== "" && text === "Добавить") {
       stack.push({ value: values.value, state: ElementStates.Changing });
@@ -52,7 +53,7 @@ export const StackPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Стек">
-      <form className={stackPageStyles.input_box}>
+      <form className={stackPageStyles.input_box} >
         <Input
           maxLength={4}
           value={values.value}
@@ -66,21 +67,21 @@ export const StackPage: React.FC = () => {
           <Button
             text="Добавить"
             type="button"
-            onClick={() => onClick("Добавить")}
+            onClick={(e) => onClick("Добавить", e)}
             disabled={values.value === "" ? true : false}
             linkedList="small"
           />
           <Button
             text="Удалить"
             type="button"
-            onClick={() => onClick("Удалить")}
+            onClick={(e) => onClick("Удалить", e)}
             disabled={stack.getLength() > 0 ? false : true}
           />
           <Button
             text="Очистить"
             type="button"
             extraClass={stackPageStyles.clear}
-            onClick={() => onClick("Очистить")}
+            onClick={(e) => onClick("Очистить", e)}
             disabled={stack.getLength() > 0 ? false : true}
           />
         </div>

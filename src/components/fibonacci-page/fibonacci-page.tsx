@@ -1,5 +1,5 @@
 import React from "react";
-import { ChangeEvent } from "react";
+import { FormEvent } from "react";
 import { useState } from "react";
 import { useForm } from "../../hooks/hooks";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
@@ -10,7 +10,6 @@ import { Circle } from "../ui/circle/circle";
 import { getNumbers, sortFibonacci } from "./fibonacci-algorithm";
 
 
-
 export const FibonacciPage: React.FC = () => {
 
   const { values, handleChange } = useForm({ value: "" });
@@ -18,7 +17,8 @@ export const FibonacciPage: React.FC = () => {
   const [state, setState] = useState<string[]>([]);
   const index = Number(values.value);
 
-  const onClick = () => {
+  const onClick = async (evt: FormEvent) => {
+    evt.preventDefault();
     setLoader(true);
     const arrayNumbers = getNumbers(index).map(String);
     sortFibonacci(arrayNumbers, setState, setLoader);
@@ -26,7 +26,7 @@ export const FibonacciPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
-      <form className={fibonacciPageStyles.input_box}>
+      <form className={fibonacciPageStyles.input_box} onSubmit={onClick}>
         <Input
           max={19}
           min={1}
@@ -37,9 +37,8 @@ export const FibonacciPage: React.FC = () => {
         />
         <Button
           text="Рассчитать"
-          type="button"
+          type="submit"
           isLoader={loader}
-          onClick={onClick}
           disabled={
             values.value &&
               Number(values.value) < 20 &&
