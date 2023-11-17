@@ -18,11 +18,15 @@ export const StackPage: React.FC = () => {
   const { values, handleChange, setValues } = useForm({ value: "" });
   const [stack, setStack] = useState(new Stack<TString>());
   const [state, setState] = useState<TString[]>([]);
+  const [addLoader, setAddLoader] = useState(false);
+  const [removeLoader, setRemoveLoader] = useState(false);
+  const [clearLoader, setClearLoader] = useState(false);
 
   const onClick = async (text: string, evt: SyntheticEvent) => {
     evt.preventDefault();
     const arr = stack.getContainer();
     if (values.value !== "" && text === "Добавить") {
+      setAddLoader(true);
       stack.push({ value: values.value, state: ElementStates.Changing });
       setStack(stack);
       setState([...arr]);
@@ -31,7 +35,9 @@ export const StackPage: React.FC = () => {
       stack.peak()!.state = ElementStates.Default;
       setStack(stack);
       setState([...arr]);
+      setAddLoader(false)
     } else if (text === "Очистить") {
+      setClearLoader(true)
       const length = stack.getLength();
       let i = 0;
       for (i; i < length; i++) {
@@ -39,7 +45,9 @@ export const StackPage: React.FC = () => {
         setStack(stack);
       }
       setState([...arr]);
+      setClearLoader(false)
     } else if (text === "Удалить") {
+      setRemoveLoader(true);
       stack.peak()!.state = ElementStates.Changing;
       setStack(stack);
       setState([...arr]);
@@ -48,6 +56,7 @@ export const StackPage: React.FC = () => {
       await timeout(500);
       setStack(stack);
       setState([...arr]);
+      setRemoveLoader(false)
     }
   };
 
@@ -82,6 +91,7 @@ export const StackPage: React.FC = () => {
           <Button
             text="Добавить"
             type="button"
+            isLoader={addLoader}
             onClick={(e) => onClick("Добавить", e)}
             disabled={values.value === "" ? true : false}
             linkedList="small"
@@ -89,12 +99,14 @@ export const StackPage: React.FC = () => {
           <Button
             text="Удалить"
             type="button"
+            isLoader={removeLoader}
             onClick={(e) => onClick("Удалить", e)}
             disabled={stack.getLength() > 0 ? false : true}
           />
           <Button
             text="Очистить"
             type="button"
+            isLoader={clearLoader}
             extraClass={stackPageStyles.clear}
             onClick={(e) => onClick("Очистить", e)}
             disabled={stack.getLength() > 0 ? false : true}

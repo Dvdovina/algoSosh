@@ -18,6 +18,13 @@ export const QueuePage: React.FC = () => {
 
   const { values, handleChange, setValues } = useForm({ value: "" })
 
+  const [addLoader, setAddLoader] = useState(false);
+
+  const [removeLoader, setRemoveLoader] = useState(false);
+
+  const [clearLoader, setClearLoader] = useState(false);
+
+
   const [queue, setQueue] = useState(new Queue<TString>(7));
 
   let array = queue.getElements() as TString[];
@@ -29,6 +36,7 @@ export const QueuePage: React.FC = () => {
   const onClick = async (text: string, evt: SyntheticEvent) => {
     evt.preventDefault();
     if (values.value !== "" && text === "Добавить") {
+      setAddLoader(true);
       queue.enqueue({ value: values.value, state: ElementStates.Changing });
       setQueue(queue);
       setArr([...array]);
@@ -36,7 +44,9 @@ export const QueuePage: React.FC = () => {
       queue.getTail()!.state = ElementStates.Default;
       setValues({ value: "" });
       setArr([...array]);
+      setAddLoader(false)
     } else if (text === "Удалить") {
+      setRemoveLoader(true);
       queue.peak()!.state = ElementStates.Changing;
       setQueue(queue);
       setArr([...array]);
@@ -45,11 +55,14 @@ export const QueuePage: React.FC = () => {
       setQueue(queue);
       await timeout(SHORT_DELAY_IN_MS);
       setArr([...array]);
+      setRemoveLoader(false)
     } else if (text === "Очистить") {
+      setClearLoader(true)
       queue.clear();
       setQueue(queue);
       array = initialArray;
       setArr([...array]);
+      setClearLoader(false)
     }
   };
 
@@ -81,6 +94,7 @@ export const QueuePage: React.FC = () => {
           <Button
             text="Добавить"
             type="button"
+            isLoader={addLoader}
             onClick={(e) => onClick("Добавить", e)}
             disabled={
               values.value === "" ||
@@ -90,12 +104,14 @@ export const QueuePage: React.FC = () => {
           <Button
             text="Удалить"
             type="button"
+            isLoader={removeLoader}
             onClick={(e) => onClick("Удалить", e)}
             disabled={!queue.isEmpty() ? false : true}
           />
           <Button
             text="Очистить"
             type="button"
+            isLoader={clearLoader}
             extraClass={queuePageStyles.clear}
             onClick={(e) => onClick("Очистить", e)}
             disabled={!queue.isEmpty() ? false : true}
