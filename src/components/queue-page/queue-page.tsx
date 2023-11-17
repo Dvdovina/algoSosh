@@ -11,7 +11,7 @@ import { ElementStates } from "../../types/element-states";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { timeout } from "../../utils/utils";
 import { Queue } from "./queue-page algorithm";
-import { ChangeEvent } from "react";
+import { SyntheticEvent, FormEvent } from "react";
 
 
 export const QueuePage: React.FC = () => {
@@ -26,7 +26,8 @@ export const QueuePage: React.FC = () => {
 
   const [arr, setArr] = useState<TString[]>(initialArray);
 
-  const onClick = async (text: string) => {
+  const onClick = async (text: string, evt: SyntheticEvent) => {
+    evt.preventDefault();
     if (values.value !== "" && text === "Добавить") {
       queue.enqueue({ value: values.value, state: ElementStates.Changing });
       setQueue(queue);
@@ -52,9 +53,21 @@ export const QueuePage: React.FC = () => {
     }
   };
 
+
+  const onSubmit = async (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    queue.enqueue({ value: values.value, state: ElementStates.Changing });
+    setQueue(queue);
+    setArr([...array]);
+    await timeout(SHORT_DELAY_IN_MS);
+    queue.getTail()!.state = ElementStates.Default;
+    setValues({ value: "" });
+    setArr([...array]);
+  }
+
   return (
     <SolutionLayout title="Очередь">
-      <form className={queuePageStyles.input_box}>
+      <form className={queuePageStyles.input_box} onSubmit={onSubmit}>
         <Input
           maxLength={4}
           value={values.value}
@@ -66,7 +79,7 @@ export const QueuePage: React.FC = () => {
           <Button
             text="Добавить"
             type="button"
-            onClick={(e) => onClick("Добавить")}
+            onClick={(e) => onClick("Добавить", e)}
             disabled={
               values.value === "" ||
                 (!queue.isEmpty() && arr.slice(-1)[0] === queue.getTail())
@@ -75,14 +88,14 @@ export const QueuePage: React.FC = () => {
           <Button
             text="Удалить"
             type="button"
-            onClick={(e) => onClick("Удалить")}
+            onClick={(e) => onClick("Удалить", e)}
             disabled={!queue.isEmpty() ? false : true}
           />
           <Button
             text="Очистить"
             type="button"
             extraClass={queuePageStyles.clear}
-            onClick={(e) => onClick("Очистить")}
+            onClick={(e) => onClick("Очистить", e)}
             disabled={!queue.isEmpty() ? false : true}
           />
         </div>
