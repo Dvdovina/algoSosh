@@ -69,12 +69,14 @@ export const StackPage: React.FC = () => {
       <form className={stackPageStyles.input_box} onSubmit={onSubmit} >
         <Input
           maxLength={4}
+          max={4}
           value={values.value}
           name="value"
           onChange={handleChange}
           type="string"
           extraClass={stackPageStyles.input}
           placeholder="Введите значение"
+          isLimitText={true}
         />
         <div className={stackPageStyles.buttons_box}>
           <Button
@@ -99,7 +101,6 @@ export const StackPage: React.FC = () => {
           />
         </div>
       </form>
-      <p className={stackPageStyles.paragraph}>Максимум — 4 символа</p>
       <ul className={stackPageStyles.circle_box}>
         {state?.map((item, index) => (
           <li key={index}>

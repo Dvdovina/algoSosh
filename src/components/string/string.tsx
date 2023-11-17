@@ -43,6 +43,7 @@ export const StringComponent: React.FC = () => {
           value={values.value}
           name="value"
           onChange={handleChange}
+          isLimitText={true}
         />
         <Button
           text="Развернуть"
@@ -51,7 +52,6 @@ export const StringComponent: React.FC = () => {
           disabled={values.value ? false : true}
         />
       </form>
-      <p className={stringStyles.paragraph}>Максимум — 11 символов</p>
       <ul className={stringStyles.circle_box}>
         {state?.map((item, index) => (
           <li key={index}>

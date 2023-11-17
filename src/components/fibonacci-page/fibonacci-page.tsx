@@ -34,6 +34,7 @@ export const FibonacciPage: React.FC = () => {
           name="value"
           onChange={handleChange}
           type="number"
+          isLimitText={true}
         />
         <Button
           text="Рассчитать"
@@ -48,7 +49,6 @@ export const FibonacciPage: React.FC = () => {
           }
         />
       </form>
-      <p className={fibonacciPageStyles.paragraph}>Максимальное число — 19</p>
       <ul className={fibonacciPageStyles.circle_box}>
         {state?.map((item, index) => (
           <li key={index}>

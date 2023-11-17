@@ -17,14 +17,3 @@
     row-gap: 48px;
 }
 
-.paragraph {
-    color: #3d3d3d;
-    display: flex;
-    font-family: Segoe UI;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 22px;
-    margin: 6px 0 120px 625px;
-    padding: 0;
-}

@@ -74,6 +74,8 @@ export const QueuePage: React.FC = () => {
           name="value"
           type="string"
           onChange={handleChange}
+          isLimitText={true}
+          max={4}
         />
         <div className={queuePageStyles.buttons_box}>
           <Button
