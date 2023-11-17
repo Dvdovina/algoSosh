@@ -1,6 +1,5 @@
 import React from "react";
-import { SyntheticEvent } from "react";
-import { ChangeEvent } from "react";
+import { SyntheticEvent, FormEvent } from "react";
 import { useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import listPageStyles from "./list-page.module.css"
@@ -301,10 +300,14 @@ export const ListPage: React.FC = () => {
     }
   };
 
+  const onSubmit = async (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+  }
+
 
   return (
     <SolutionLayout title="Связный список">
-      <form className={listPageStyles.input_box}>
+      <form className={listPageStyles.input_box} onSubmit={onSubmit}>
         <Input
           placeholder="Введите значение"
           extraClass={listPageStyles.input}
@@ -345,7 +348,7 @@ export const ListPage: React.FC = () => {
           disabled={arr.length === 0}
         />
       </form>
-      <form className={listPageStyles.input_box}>
+      <form className={listPageStyles.input_box} onSubmit={onSubmit}>
         <Input
           placeholder="Введите индекс"
           extraClass={listPageStyles.input}
