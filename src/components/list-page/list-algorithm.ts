@@ -1,84 +1,80 @@
-import { ElementStates } from "../../types/element-states";
-
-
 export class Node<T> {
-    value: T
-    next: Node<T> | null
+    value: T;
+    next: Node<T> | null;
     constructor(value: T, next?: Node<T> | null) {
         this.value = value;
-        this.next = (next === undefined ? null : next);
+        this.next = this.next = (next === undefined ? null : next);
     }
 }
 
-export type TLinkedList<T> = {
+interface ILinkedList<T> {
     append: (element: T) => void;
-    prepend: (element: T) => void;
-    deleteHead: () => Node<T> | null;
-    deleteTail: () => Node<T> | null;
+    prepend: (element: T) => this;
+    getSize: () => number;
     addByIndex: (element: T, index: number) => void;
     deleteByIndex: (index: number) => void;
-    getSize: () => number;
+    deleteHead: () => Node<T> | null;
+    deleteTail: () => Node<T> | null;
     toArray: () => T[]
 }
 
-export class LinkedList<T> implements TLinkedList<T> {
-    // private container: (T | null)[] = [];
+export class LinkedList<T> implements ILinkedList<T> {
+
     private head: Node<T> | null;
     private tail: Node<T> | null;
     private size: number;
-    length: number;
+    private length: number;
 
     constructor(arr: T[]) {
         this.head = null;
         this.tail = null;
-        this.length = 0;
         this.size = 0;
-        if (arr && arr.length > 0) {
-            arr?.forEach((item) => {
-                this.append(item)
-            })
-        }
+        this.length = 0;
+        arr.forEach((item) => this.append(item));
     }
-    append = (el: T) => {
+
+    append(el: T) {
         const node = new Node(el);
         if (!this.head || !this.tail) {
             this.head = node;
             this.tail = node;
-            this.length++;
             return this;
         }
         this.tail.next = node;
         this.tail = node;
         this.length++;
+        this.size++;
         return this;
     }
-    prepend = (el: T) => {
-        const node = new Node(el);
-        if (!this.head || !this.tail) {
-            this.head = node;
-            this.head.next = null;
+
+    prepend(el: T) {
+        const node = new Node(el, this.head);
+        this.head = node;
+        if (!this.tail) {
             this.tail = node;
         }
-        node.next = this.head;
-        this.head = node;
         this.length++;
         this.size++;
+        return this;
     }
-    deleteHead = () => {
+
+    deleteHead() {
         if (!this.head) {
             return null;
         }
         const deletedHead = this.head;
+
         if (this.head.next) {
             this.head = this.head.next;
         } else {
             this.head = null;
             this.tail = null;
         }
-        this.length--;
         this.size--;
+        this.length--;
         return deletedHead;
     }
+
     deleteTail() {
         if (!this.tail) {
             return null;
@@ -102,33 +98,37 @@ export class LinkedList<T> implements TLinkedList<T> {
         this.length--;
         return deletedTail;
     }
-    addByIndex = (element: T, index: number) => {
+
+    addByIndex(element: T, index: number) {
         if (index < 0 || index > this.size) {
             console.log("Enter a valid index");
             return;
         } else {
             const node = new Node(element);
+            let el;
             if (index === 0) {
                 node.next = this.head;
                 this.head = node;
             } else {
-                let curr = this.head;
-                let currIndex = 0;
-                while (currIndex++ < index) {
-                    if (curr) {
-                        curr = curr.next;
+                let current = this.head;
+                let currentIndex = 0;
+                while (currentIndex++ < index) {
+                    el = current;
+                    if (current) {
+                        current = current.next;
                     }
                 }
-                if (curr) {
-                    node.next = curr.next;
-                    curr.next = node;
+                if (el) {
+                    node.next = current;
+                    el.next = node;
                 }
             }
             this.size++;
             this.length++;
         }
     }
-    deleteByIndex = (index: number) => {
+
+    deleteByIndex(index: number) {
         if (index < 0 || index > this.size) {
             console.log("Enter a valid index");
             return;
@@ -137,29 +137,34 @@ export class LinkedList<T> implements TLinkedList<T> {
         if (index === 0) {
             if (this.head) this.head = this.head.next;
         } else {
-            let curr = null;
+            let current = null;
             let currIndex = 0;
             while (currIndex++ < index) {
-                curr = start;
+                current = start;
                 if (start) {
                     start = start.next;
                 }
             }
-            if (curr?.next) {
-                curr.next = start?.next ? start.next : null;
+            if (current?.next) {
+                current.next = start?.next ? start.next : null;
             }
         }
         this.size--;
         this.length--;
     }
+
     toArray() {
-        let curr = this.head;
-        let arr: T[] = [];
-        while (curr) {
-            arr.push(curr.value);
-            curr = curr.next;
+        let current = this.head;
+        const array: T[] = [];
+        while (current) {
+            array.push(current?.value);
+            current = current.next;
         }
-        return arr;
+        return array;
     }
-    getSize = () => this.length;
+
+    getSize() {
+        return this.size;
+    }
+
 }
