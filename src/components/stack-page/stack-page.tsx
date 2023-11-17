@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { FormEvent } from "react";
+import { SyntheticEvent, FormEvent } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import stackPageStyles from "./stack-page.module.css"
 import { Input } from "../ui/input/input";
@@ -19,7 +19,7 @@ export const StackPage: React.FC = () => {
   const [stack, setStack] = useState(new Stack<TString>());
   const [state, setState] = useState<TString[]>([]);
 
-  const onClick = async (text: string, evt: FormEvent) => {
+  const onClick = async (text: string, evt: SyntheticEvent) => {
     evt.preventDefault();
     const arr = stack.getContainer();
     if (values.value !== "" && text === "Добавить") {
@@ -51,9 +51,22 @@ export const StackPage: React.FC = () => {
     }
   };
 
+  const onSubmit = async (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    const arr = stack.getContainer();
+    stack.push({ value: values.value, state: ElementStates.Changing });
+    setStack(stack);
+    setState([...arr]);
+    setValues({ value: "" });
+    await timeout(500);
+    stack.peak()!.state = ElementStates.Default;
+    setStack(stack);
+    setState([...arr]);
+  }
+
   return (
     <SolutionLayout title="Стек">
-      <form className={stackPageStyles.input_box} >
+      <form className={stackPageStyles.input_box} onSubmit={onSubmit} >
         <Input
           maxLength={4}
           value={values.value}
