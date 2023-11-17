@@ -17,7 +17,7 @@ export const FibonacciPage: React.FC = () => {
   const [state, setState] = useState<string[]>([]);
   const index = Number(values.value);
 
-  const onClick = async (evt: FormEvent) => {
+  const onClick = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     setLoader(true);
     const arrayNumbers = getNumbers(index).map(String);

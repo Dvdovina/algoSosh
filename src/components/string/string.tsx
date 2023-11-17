@@ -21,7 +21,7 @@ export const StringComponent: React.FC = () => {
   const [loader, setLoader] = useState(false);
   const [state, setState] = useState<TString[]>([]);
 
-  const onClick = async (evt: FormEvent) => {
+  const onClick = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     setLoader(true);
     const array = Array.from(values.value);
