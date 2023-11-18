@@ -1,0 +1,33 @@
+.input_box {
+    column-gap: 12px;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    max-width: 840px;
+    padding-bottom: 15px;
+}
+
+.button {
+    width: 362px;
+}
+
+.input {
+    max-width: 204px
+}
+
+.circle_box {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    list-style-type: none;
+    margin: 0 auto;
+    padding-left: 0;
+    padding-top: 120px;
+}
+
+
+.listItem {
+    align-items: center;
+    display: flex;
+    gap: 16px;
+}
