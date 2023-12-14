@@ -10,6 +10,9 @@ export const sortArray = async (
     setLoader: (value: React.SetStateAction<boolean>) => void
 ) => {
     const { length } = arr;
+    if (arr.length === 0) {
+        return arr;
+    }
     let start = 0;
     let end;
     let mid = Math.floor(length / 2);
