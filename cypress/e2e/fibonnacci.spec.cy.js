@@ -4,7 +4,7 @@ describe('fibonacci page works correctly', () => {
     beforeEach(() => {
         cy.visit('fibonacci');
     });
-    it('start button is disabled when input is empty', () => {
+    it('button is disabled when input is empty', () => {
         cy.get('input').should('have.value', '');
         cy.get('button').should('contains.text', 'Рассчитать').should('be.disabled');
     });

@@ -4,7 +4,7 @@ describe('string page works correctly', () => {
   beforeEach(() => {
     cy.visit('recursion');
   });
-  it('start button is disabled when input is empty', () => {
+  it('button is disabled when input is empty', () => {
     cy.get('input').should('have.value', '');
     cy.get('button').should('contains.text', 'Развернуть').and('be.disabled');
   });

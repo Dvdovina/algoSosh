@@ -5,7 +5,7 @@ describe('stack page works correctly', () => {
     beforeEach(() => {
       cy.visit('stack');
     });
-    it('start button is disabled when input is empty', () => {
+    it('button is disabled when input is empty', () => {
       cy.get('input').should('have.value', '');
       cy.get('button').should('contains.text', 'Добавить').should('be.disabled');
       cy.get('button').should('contains.text', 'Удалить').should('be.disabled');
